@@ -7,10 +7,10 @@ export default Home = ({ navigation, route }) => {
     const [location, setLocation] = useState(null);
     const [currentRegion, setCurrentRegion] = useState(null);
     const [postalLocation, setPostalLocation] = useState(null);
+    const [filter, setFilter] = useState('');
 
     useEffect(() => {
         (async () => {
-            console.log('asking permissions')
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
                 console.log('Access to location was denied - please update this in your settings');
@@ -33,11 +33,11 @@ export default Home = ({ navigation, route }) => {
                 setPostalLocation(post[0])
                 setLocation(locale);
                 console.log(currentRegion, "current region")
-                console.log(post, "current post")
             }
 
         })();
     }, [location, postalLocation]);
+    console.log('filter', filter)
 
     return (
         <>
@@ -50,13 +50,15 @@ export default Home = ({ navigation, route }) => {
                     <TextInput
                         placeholder="Search"
                         style={[styles.inputs, styles.searchInput]}
+                        value={filter}
+                        onChangeText={setFilter}
                     />
                 </View>
             </View>
             <View style={[styles.logInButtons]}>
                 <Pressable
                     onPress={() => {
-                        navigation.navigate('Map', { location: location })
+                        navigation.navigate('Map', { location: location, filter: filter })
                     }}
                     style={styles.defaultMainButton}
                 >
