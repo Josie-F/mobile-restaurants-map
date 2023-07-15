@@ -6,10 +6,13 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 
 
 export default MapPage = ({ navigation, route }) => {
+    const [currentFilter, setCurrentFilter] = useState(null)
     const [currentRegion, setCurrentRegion] = useState(null);
     const [topRestaurants, setTopRestaurants] = useState([]);
+    const [selectedMarker, setSelectedMarker] = useState({});
 
     nearbySearch = () => {
+        setTopRestaurants([])
         let nearbyRestaurants = []
         const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${route.params?.location?.coords.latitude},${route.params?.location?.coords.longitude}&radius=5000&type=restaurant&keyword=${route.params?.filter}&key=${process.env.EXPO_PUBLIC_API_KEY}`;
         try {
@@ -23,6 +26,7 @@ export default MapPage = ({ navigation, route }) => {
                         }
                     }
                 }).then(() => {
+                    setCurrentFilter(route.params?.filter)
                     setTopRestaurants(nearbyRestaurants)
                 })
         } catch (error) {
@@ -30,6 +34,13 @@ export default MapPage = ({ navigation, route }) => {
         }
 
     }
+
+    placeMarker = (data, details) => {
+        console.log(details.geometry.location)
+        setSelectedMarker(details.geometry.location)
+        console.log(selectedMarker)
+    }
+
     useEffect(() => {
         if (route.params?.location && !currentRegion) {
             setCurrentRegion({
@@ -39,14 +50,14 @@ export default MapPage = ({ navigation, route }) => {
                 longitudeDelta: 0.0421,
             })
         }
-        if (topRestaurants.length <= 0) {
+        if (!route.params?.filter || route.params?.filter !== currentFilter) {
             nearbySearch()
         }
-    }, [currentRegion])
+    }, [currentRegion, route.params?.filter])
 
-    const Item = ({ title, rating, key }) => (
-        <View key={key}>
-            <Text >{title} | Rating: {rating}</Text>
+    const Item = ({ title, rating }) => (
+        <View>
+            <Text>{title} | Rating: {rating}</Text>
         </View>
     );
 
@@ -56,42 +67,44 @@ export default MapPage = ({ navigation, route }) => {
                 placeholder="Type a place"
                 query={{ key: process.env.EXPO_PUBLIC_API_KEY, components: 'country:uk', type: 'restaurant' }}
                 fetchDetails={true}
-                onPress={(data, details = null) => console.log('ON PRESS DATA')}
+                onPress={(data, details = null) => placeMarker(data, details)}
                 onFail={error => console.log(error)}
                 onNotFound={() => console.log('no results found')}
                 style={styles.autoComplete}
                 nearbyPlacesAPI='GooglePlacesSearch'
             >
             </GooglePlacesAutocomplete>
-            <FlatList
-                data={topRestaurants}
-                renderItem={({ item, i }) => <Item title={item.name} rating={item.rating} key={i} />}
-                keyExtractor={item => item.id}
-                style={[styles.listItems]}
-            />
             {
                 currentRegion && topRestaurants.length > 0 ?
-                    <MapView style={styles.map} region={currentRegion}>
-                        <>
-                            {
-                                topRestaurants?.map((restaurant, i) => {
-                                    return (<Marker key={i}
-                                        coordinate={{
-                                            latitude: restaurant.geometry.location.lat,
-                                            longitude: restaurant.geometry.location.lng,
-                                        }}
-                                        pinColor={"purple"}
-                                        title={restaurant.name}
-                                        description={restaurant.name}
-                                        onPress={() => console.log('pressed marker')}
-                                    >
-                                        {/* <Text style={styles.markerStyling}>Something</Text> */}
-                                    </Marker>)
-                                })
+                    <>
+                        <FlatList
+                            data={topRestaurants}
+                            renderItem={({ item, i }) => <Item title={item.name} rating={item.rating} />}
+                            keyExtractor={(item, id) => (`listKey-${id}`)}
+                            style={[styles.listItems]}
+                        />
+                        <MapView style={styles.map} region={currentRegion}>
+                            <>
+                                {
+                                    topRestaurants?.map((restaurant, i) => {
+                                        return (<Marker key={i}
+                                            coordinate={{
+                                                latitude: restaurant.geometry.location.lat,
+                                                longitude: restaurant.geometry.location.lng,
+                                            }}
+                                            pinColor={"purple"}
+                                            title={restaurant.name}
+                                            description={restaurant.name}
+                                            onPress={() => console.log('pressed marker')}
+                                        >
+                                            {/* <Text style={styles.markerStyling}>Something</Text> */}
+                                        </Marker>)
+                                    })
 
-                            }
-                        </>
-                    </MapView>
+                                }
+                            </>
+                        </MapView>
+                    </>
                     :
                     <Text style={styles.loadingText}>
                         Loading...
