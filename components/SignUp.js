@@ -1,23 +1,23 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Pressable, Text, TextInput, View, ToastAndroid } from "react-native";
 import { styles } from "../layout/styleSheet";
-import { verifyUserCredentials } from '../database-service';
+import { verifyUserCredentials, addUser } from '../database-service';
+import { LoginContext } from "./SignIn";
 
-export const LoginContext = React.createContext({ loginState: { userName: '', signedIn: false, token: null }, setLoginState: () => { } });
 
-
-export default SignIn = ({ navigation }) => {
+export default SignUp = ({ navigation }) => {
     const [loginState, setLoginState] = useContext(LoginContext);
 
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
-    function checkUserCredentials() {
+    function signUp() {
         verifyUserCredentials(userName, password, (user) => {
-            if (user) {
-                setLoginState({ signedIn: true, token: user.id, userName: user.username })
-            } else {
-                ToastAndroid.show("This user doesn't seem to exist, Please try again", ToastAndroid.SHORT)
+            if (user == undefined) {
+                addUser(userName, password, () => {
+                    setLoginState({ signedIn: true, token: "temporaryToken", userName: userName });
+                });
+
             }
         })
     }
@@ -44,32 +44,24 @@ export default SignIn = ({ navigation }) => {
                         style={[styles.inputs]}
                     />
                 </View>
-                <View style={[styles.loginMainContent]}>
-                    <Text style={{ fontSize: 10 }}>Forgot Password?</Text>
-                    <Text>Don't have an account?</Text>
-                </View>
                 <View style={[styles.logInButtons]}>
                     <Pressable
                         title="Sign Up"
-                        onPress={() => {
-                            navigation.navigate('SignUp')
-                        }}
-                        style={styles.secondaryButton}
+                        onPress={() => { signUp(userName, password) }}
+                        style={styles.defaultMainButton}
                     >
                         <Text
-                            style={[styles.buttonTextSecondary]}
+                            style={[styles.buttonText]}
                         >Sign Up</Text>
                     </Pressable>
                     <Pressable
-                        title="Log In"
-                        onPress={() => { checkUserCredentials(userName, password) }}
-                        style={[styles.defaultMainButton]}>
-                        <Text
-                            style={[styles.buttonText]}
-                        >Sign In</Text>
+                        onPress={() => {
+                            navigation.navigate('SignIn')
+                        }}>
+                        <Text style={styles.backText}>Back to Login</Text>
                     </Pressable>
                 </View>
-            </View>
+            </View >
         </>
     )
 }

@@ -7,7 +7,6 @@ export const initiateDatabase = async () => {
         try {
             db = SQLite.openDatabase("restaurantPicker.db");
             db.transaction(transaction => {
-                console.log("inside transaction")
                 transaction.executeSql(
                     'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password INT)'
                     // 'DROP TABLE IF EXISTS users'
@@ -25,10 +24,10 @@ export const initiateDatabase = async () => {
     }
 }
 
-export const addUser = (username, pass) => {
+export const addUser = (username, password, callback) => {
     db.transaction(transaction => {
         transaction.executeSql('INSERT INTO users (username, password) values (?, ?)', [username, password],
-            (transactionObj, resultSet) => console.log('result: ', resultSet),
+            (transactionObj, resultSet) => callback(resultSet),
             (transactionObj, error) => console.log('Error when inserting into table: ', error))
     },
         (e) => {
