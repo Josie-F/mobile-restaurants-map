@@ -70,7 +70,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
   map: {
-    marginTop: 30,
+    // marginTop: 30,
     width: '100%',
     height: '70%',
     zIndex: -1
@@ -108,18 +108,23 @@ export const styles = StyleSheet.create({
   searchInput: {
     marginTop: 30
   },
-  listContainer: {
-    // flexDirection: 'column',
-    // padding: 10,
-    // margin: 10,
-    // borderColor: 'lightgrey',
-    // borderWidth: 1,
-    // borderRadius: 20,
-  },
   listItems: {
-    marginTop: 10
+    zIndex: -100,
+    borderColor: 'lightgrey',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 15,
+    marginTop: 35,
+    marginBottom: 10,
+    backgroundColor: 'lightgrey',
   },
   backText: {
     textAlign: 'center'
+  },
+  markerStyling: {
+    borderRadius: 4,
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: '#673ab6',
   }
 });
