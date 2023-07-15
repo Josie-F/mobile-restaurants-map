@@ -109,5 +109,8 @@ export const styles = StyleSheet.create({
   },
   listItems: {
     marginTop: 10
+  },
+  backText: {
+    textAlign: 'center'
   }
 });
