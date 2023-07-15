@@ -70,8 +70,17 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
   map: {
+    marginTop: 30,
     width: '100%',
     height: '70%',
+    zIndex: -1
+  },
+  autoComplete: {
+    position: 'absolute',
+    marginTop: 40
+  },
+  loadingText: {
+    textAlign: 'center',
   },
   homeContainer: {
     flexDirection: 'column',
@@ -100,12 +109,12 @@ export const styles = StyleSheet.create({
     marginTop: 30
   },
   listContainer: {
-    flexDirection: 'column',
-    padding: 10,
-    margin: 10,
-    borderColor: 'lightgrey',
-    borderWidth: 1,
-    borderRadius: 20,
+    // flexDirection: 'column',
+    // padding: 10,
+    // margin: 10,
+    // borderColor: 'lightgrey',
+    // borderWidth: 1,
+    // borderRadius: 20,
   },
   listItems: {
     marginTop: 10

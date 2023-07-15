@@ -43,7 +43,7 @@ export default Home = ({ navigation, route }) => {
         <>
             <View style={[styles.homeContainer]}>
                 <Text style={styles.welcomeTitle}>Welcome {route.params?.userName}</Text>
-                <Text style={styles.locationText}>Your Location is: {postalLocation?.city || postalLocation?.subregion}, {postalLocation?.postalCode} </Text>
+                <Text style={styles.locationText}>Your Location is: {postalLocation ? `${postalLocation?.city || postalLocation?.subregion}, ${postalLocation?.postalCode}` : `Loading...`} </Text>
                 <View style={styles.mainContentContainer}>
                     <Text style={styles.mainContentText}>What food are you craving today?</Text>
                     <Text style={styles.mainContentText}>We'll find the highest rated places closest to you serving it!</Text>
@@ -56,7 +56,7 @@ export default Home = ({ navigation, route }) => {
             <View style={[styles.logInButtons]}>
                 <Pressable
                     onPress={() => {
-                        navigation.navigate('Map')
+                        navigation.navigate('Map', { location: location })
                     }}
                     style={styles.defaultMainButton}
                 >
