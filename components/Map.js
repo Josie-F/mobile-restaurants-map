@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MapView, { Marker } from 'react-native-maps';
-import { Text, View, FlatList } from "react-native";
+import { Text, View, FlatList, ToastAndroid } from "react-native";
 import { styles } from "../layout/styleSheet";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 
 export default MapPage = ({ navigation, route }) => {
-    const [currentFilter, setCurrentFilter] = useState(null)
+    const [currentFilter, setCurrentFilter] = useState(null);
     const [currentRegion, setCurrentRegion] = useState(null);
     const [topRestaurants, setTopRestaurants] = useState([]);
-    const [selectedMarker, setSelectedMarker] = useState({});
+    const [selectedRestaurant, setSelectedRestaurant] = useState({});
+    const mapInstanceRef = useRef(null);
 
     nearbySearch = () => {
         setTopRestaurants([])
@@ -35,10 +36,29 @@ export default MapPage = ({ navigation, route }) => {
 
     }
 
-    placeMarker = (data, details) => {
-        console.log(details.geometry.location)
-        setSelectedMarker(details.geometry.location)
-        console.log(selectedMarker)
+    placeSearch = (placeId) => {
+        const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${process.env.EXPO_PUBLIC_API_KEY}`;
+        try {
+            fetch(url)
+                .then(res =>
+                    res.json())
+                .then((data) => {
+                    setSelectedRestaurant(data?.result)
+                })
+        } catch (error) {
+            console.log('Failed to fetch selected restaurant: ', error)
+        }
+    }
+
+    placeMarker = (details) => {
+        setTopRestaurants([...topRestaurants, details])
+        placeSearch(details.place_id);
+        mapInstanceRef.current.animateToRegion({
+            latitude: details?.geometry?.location?.lat,
+            longitude: details?.geometry?.location?.lng,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+        }, 2000);
     }
 
     useEffect(() => {
@@ -67,7 +87,7 @@ export default MapPage = ({ navigation, route }) => {
                 placeholder="Type a place"
                 query={{ key: process.env.EXPO_PUBLIC_API_KEY, components: 'country:uk', type: 'restaurant' }}
                 fetchDetails={true}
-                onPress={(data, details = null) => placeMarker(data, details)}
+                onPress={(data, details = null) => placeMarker(details)}
                 onFail={error => console.log(error)}
                 onNotFound={() => console.log('no results found')}
                 style={styles.autoComplete}
@@ -83,7 +103,7 @@ export default MapPage = ({ navigation, route }) => {
                             keyExtractor={(item, id) => (`listKey-${id}`)}
                             style={[styles.listItems]}
                         />
-                        <MapView style={styles.map} region={currentRegion}>
+                        <MapView style={styles.map} ref={mapInstanceRef} region={currentRegion}>
                             <>
                                 {
                                     topRestaurants?.map((restaurant, i) => {
@@ -92,12 +112,21 @@ export default MapPage = ({ navigation, route }) => {
                                                 latitude: restaurant.geometry.location.lat,
                                                 longitude: restaurant.geometry.location.lng,
                                             }}
-                                            pinColor={"purple"}
+                                            pinColor={"#F7D200"}
                                             title={restaurant.name}
-                                            description={restaurant.name}
-                                            onPress={() => console.log('pressed marker')}
+                                            description={selectedRestaurant?.editorial_summary?.overview}
+                                            onPress={(e) => { placeSearch(restaurant.place_id) }}
+                                            onCalloutPress={() => {
+                                                mapInstanceRef.current.animateToRegion({
+                                                    latitude: restaurant?.geometry?.location?.lat,
+                                                    longitude: restaurant?.geometry?.location?.lng,
+                                                    latitudeDelta: 0.01,
+                                                    longitudeDelta: 0.01,
+                                                }, 2000);
+                                                ToastAndroid.show(`Delivery: ${selectedRestaurant.delivery} \n Dine In: ${selectedRestaurant.dine_in} \n  Website: ${selectedRestaurant.website}`, ToastAndroid.LONG)
+                                            }
+                                            }
                                         >
-                                            {/* <Text style={styles.markerStyling}>Something</Text> */}
                                         </Marker>)
                                     })
 
