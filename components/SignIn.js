@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Pressable, Text, TextInput, View, ToastAndroid } from "react-native";
+import { Pressable, Text, TextInput, View, ToastAndroid, Linking } from "react-native";
 import { styles } from "../layout/styleSheet";
 import { verifyUserCredentials } from '../database-service';
 
@@ -84,6 +84,8 @@ export default SignIn = ({ navigation }) => {
                     </Pressable>
                 </View>
             </View>
+            {/* Crediting the creator of the icon im using as splash screen and icon */}
+            <Text style={styles.creditIcon} onPress={() => Linking.openURL('https://www.flaticon.com/free-icons/nutrition')} aria-label="nutrition icons">Nutrition icons created by paulalee - Flaticon</Text>
         </>
     )
 }

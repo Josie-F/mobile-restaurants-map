@@ -4,10 +4,10 @@
     "slug": "RestaurantFinder",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/balanced-diet.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/balanced-diet.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/balanced-diet.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
@@ -27,7 +27,7 @@
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/balanced-diet.png"
     }
   }
 }

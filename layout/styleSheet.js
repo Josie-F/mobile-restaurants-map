@@ -177,5 +177,11 @@ export const styles = StyleSheet.create({
     bottom: 0,
     alignSelf: 'center',
     width: '100%'
+  },
+  creditIcon: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#a28acb',
+    textAlign: 'center',
   }
 });
