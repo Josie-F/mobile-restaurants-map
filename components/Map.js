@@ -115,7 +115,7 @@ export default MapPage = ({ navigation, route }) => {
                                                 latitude: restaurant.geometry.location.lat,
                                                 longitude: restaurant.geometry.location.lng,
                                             }}
-                                            pinColor={"#F7D200"}
+                                            pinColor={"#FF9800"}
                                             title={restaurant.name}
                                             onPress={(e) => { placeSearch(restaurant.place_id) }}
                                             onCalloutPress={() => {

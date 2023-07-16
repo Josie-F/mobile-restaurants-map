@@ -24,7 +24,7 @@ const TabScreens = ({ route, navigation }) => {
       screenOptions={{
         tabBarHideOnKeyboard: true,
         tabBarShowLabel: true,
-        tabBarActiveTintColor: '#673ab6',
+        tabBarActiveTintColor: '#FF9800',
       }}>
       <Tab.Screen
         name="Home"
@@ -36,7 +36,7 @@ const TabScreens = ({ route, navigation }) => {
               <Ionicons
                 focused={focused}
                 name="home"
-                color={!focused ? '#a28acb' : '#673ab6'}
+                color={!focused ? '#FF9800' : '#f9cf93'}
                 size={20}
               />
             );
@@ -52,7 +52,7 @@ const TabScreens = ({ route, navigation }) => {
               <Ionicons
                 focused={focused}
                 name="map"
-                color={!focused ? '#a28acb' : '#673ab6'}
+                color={!focused ? '#FF9800' : '#f9cf93'}
                 size={20}
               />
             );
@@ -67,7 +67,7 @@ const TabScreens = ({ route, navigation }) => {
               <Ionicons
                 focused={focused}
                 name="exit"
-                color={!focused ? '#a28acb' : '#673ab6'}
+                color={!focused ? '#FF9800' : '#f9cf93'}
                 size={20}
               />
             );
