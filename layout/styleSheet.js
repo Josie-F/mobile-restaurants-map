@@ -137,5 +137,45 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: '#673ab6',
+  },
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%'
+  },
+  modalContent: {
+    flexDirection: 'column',
+    padding: 30,
+    marginTop: 50,
+  },
+  restaurantInfo: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#673ab6',
+    textAlign: 'center',
+  },
+  restaurantInfoTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#673ab6',
+    textAlign: 'center',
+  },
+  modalClose: {
+    padding: 20,
+    backgroundColor: '#673ab6',
+    alignSelf: 'center',
+    textAlign: 'center',
+    borderRadius: 4,
+    margin: 5,
+    width: '100%'
+  },
+  modalCloseText: {
+    color: 'white'
+  },
+  modalButtons: {
+    padding: 20,
+    bottom: 0,
+    alignSelf: 'center',
+    width: '100%'
   }
 });

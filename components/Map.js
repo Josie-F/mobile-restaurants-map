@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import MapView, { Marker } from 'react-native-maps';
-import { Text, View, FlatList, Modal, Pressable } from "react-native";
+import { Text, View, FlatList, Modal, Pressable, ToastAndroid } from "react-native";
 import { styles } from "../layout/styleSheet";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
@@ -39,6 +39,7 @@ export default MapPage = ({ navigation, route }) => {
     }
 
     placeSearch = (placeId) => {
+        setSelectedRestaurant(null)
         const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${process.env.EXPO_PUBLIC_API_KEY}`;
         try {
             fetch(url)
@@ -116,7 +117,6 @@ export default MapPage = ({ navigation, route }) => {
                                             }}
                                             pinColor={"#F7D200"}
                                             title={restaurant.name}
-                                            description={selectedRestaurant?.editorial_summary?.overview}
                                             onPress={(e) => { placeSearch(restaurant.place_id) }}
                                             onCalloutPress={() => {
                                                 mapInstanceRef.current.animateToRegion({
@@ -125,13 +125,16 @@ export default MapPage = ({ navigation, route }) => {
                                                     latitudeDelta: 0.01,
                                                     longitudeDelta: 0.01,
                                                 }, 2000);
-                                                setModalDetails({ website: selectedRestaurant.website, delivery: selectedRestaurant.delivery })
+                                                setModalDetails({
+                                                    website: selectedRestaurant?.website,
+                                                    delivery: selectedRestaurant?.delivery,
+                                                    description: selectedRestaurant?.editorial_summary?.overview,
+                                                    dineIn: selectedRestaurant?.dine_in
+                                                })
                                                 setModalVisible(true)
                                             }}
-                                        >
-                                        </Marker>)
+                                        ></Marker>)
                                     })
-
                                 }
                             </>
                         </MapView>
@@ -141,27 +144,33 @@ export default MapPage = ({ navigation, route }) => {
                         Loading...
                     </Text>
             }
-
             <Modal
                 animationType="slide"
                 transparent={false}
                 visible={modalVisible}
+                style={styles.modal}
                 onRequestClose={() => {
                     setModalVisible(!modalVisible);
                 }}>
                 <View>
-                    <View>
-                        <Pressable
-                            onPress={() => ToastAndroid.show("This feature has not been implemented yet!", ToastAndroid.LONG)}>
-                            <Text>Click here to book or inquire: {modalDetails.website}</Text>
-                        </Pressable>
-                        <Text>Dine In: {selectedRestaurant.dine_in}</Text>
-                        <Text>Delivery: {selectedRestaurant.delivery}</Text>
-                        {/* <Text>Opening Hours: {selectedRestaurant.delivery}</Text> */}
-                        <Pressable
-                            onPress={() => setModalVisible(!modalVisible)}>
-                            <Text>Close Modal</Text>
-                        </Pressable>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.restaurantInfoTitle}>{modalDetails?.description}</Text>
+                        <Text style={styles.restaurantInfo}>Dine In: {modalDetails?.dine_in ? "Available" : "Unavailable"}</Text>
+                        <Text style={styles.restaurantInfo}>Delivery: {modalDetails?.delivery ? "Available" : "Unavailable"}</Text>
+                        <Text style={styles.restaurantInfo}>Website: {modalDetails?.website}</Text>
+                        <View style={styles.modalButtons}>
+                            <Pressable
+                                style={styles.modalClose}
+                                onPress={() => ToastAndroid.show("This feature has not been implemented yet!", ToastAndroid.LONG)}>
+                                <Text style={styles.modalCloseText}>Click here to book or inquire</Text>
+                            </Pressable>
+                            <Pressable
+                                onPress={() => setModalVisible(!modalVisible)}
+                                style={styles.modalClose}>
+                                <Text style={styles.modalCloseText}>Close Modal</Text>
+                            </Pressable>
+                        </View>
+
                     </View>
                 </View>
             </Modal>
