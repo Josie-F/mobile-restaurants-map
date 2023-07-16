@@ -4,16 +4,19 @@ import Home from './components/Home';
 import MapPage from './components/Map';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { LoginContext } from './components/SignIn';
 import { initiateDatabase, getUsers } from './database-service'
 import SignUp from './components/SignUp';
 import { Ionicons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const ButtonScreen = () => null;
 
 const TabScreens = ({ route, navigation }) => {
+  const [loginState, setLoginState] = useContext(LoginContext);
   const { userName } = route.params;
   return (
     <Tab.Navigator
@@ -56,12 +59,30 @@ const TabScreens = ({ route, navigation }) => {
           },
         }}
       />
+      <Tab.Screen name="SignOut"
+        options={({ navigation }) => ({
+          tabBarButton: props => <TouchableOpacity {...props} onPress={() => setLoginState({ userName: '', signedIn: false, token: null })} />,
+          tabBarIcon: ({ color, size, focused }) => {
+            return (
+              <Ionicons
+                focused={focused}
+                name="exit"
+                color={!focused ? '#a28acb' : '#673ab6'}
+                size={20}
+              />
+            );
+          },
+        })}
+        component={ButtonScreen}
+      />
     </Tab.Navigator>
   );
 }
 
 export default function App() {
   const [loginState, setLoginState] = useState({ userName: '', signedIn: false, token: null });
+
+
   initiateDatabase();
   // getUsers(); // DEBUG ONLY
 
