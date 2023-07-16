@@ -70,8 +70,8 @@ export default MapPage = ({ navigation, route }) => {
 
     useEffect(() => {
         (async () => {
+            // Check if location permissions are granted. Show a toast to the user if they are not
             let { granted } = await Location.getForegroundPermissionsAsync()
-            console.log(granted)
             if (granted !== true) {
                 console.log('Access to location was denied');
                 ToastAndroid.show("Access to location was denied! - Change this feature in your settings to be able to continue using this app", ToastAndroid.LONG)

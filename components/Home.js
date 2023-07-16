@@ -12,6 +12,7 @@ export default Home = ({ navigation, route }) => {
 
     useEffect(() => {
         (async () => {
+            // Request location permissions. Show a toast to the user if they deny permissions.
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
                 console.log('Access to location was denied');
