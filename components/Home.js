@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, Pressable, View, TextInput } from "react-native";
+import { Text, Pressable, View, TextInput, ToastAndroid } from "react-native";
 import { styles } from "../layout/styleSheet";
 import * as Location from 'expo-location'
 
@@ -13,7 +13,8 @@ export default Home = ({ navigation, route }) => {
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
-                console.log('Access to location was denied - please update this in your settings');
+                console.log('Access to location was denied');
+                ToastAndroid.show("Access to location was denied! - Change this feature in your settings to be able to continue using this app", ToastAndroid.LONG)
                 return;
             }
             const locale = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest, maximumAge: 10000 });

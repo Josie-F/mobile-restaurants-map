@@ -3,6 +3,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { Text, View, FlatList, Modal, Pressable, ToastAndroid } from "react-native";
 import { styles } from "../layout/styleSheet";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import * as Location from 'expo-location'
 
 
 export default MapPage = ({ navigation, route }) => {
@@ -65,6 +66,16 @@ export default MapPage = ({ navigation, route }) => {
     }
 
     useEffect(() => {
+        (async () => {
+            let { granted } = await Location.getForegroundPermissionsAsync()
+            console.log(granted)
+            if (granted !== true) {
+                console.log('Access to location was denied');
+                ToastAndroid.show("Access to location was denied! - Change this feature in your settings to be able to continue using this app", ToastAndroid.LONG)
+                return;
+            }
+        })()
+
         if (route.params?.location && !currentRegion) {
             setCurrentRegion({
                 latitude: route.params?.location?.coords.latitude,
