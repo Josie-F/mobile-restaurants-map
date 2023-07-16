@@ -13,13 +13,18 @@ export default SignIn = ({ navigation }) => {
     const [password, setPassword] = useState('');
 
     function checkUserCredentials() {
-        verifyUserCredentials(userName, password, (user) => {
-            if (user) {
-                setLoginState({ signedIn: true, token: user.id, userName: user.username })
-            } else {
-                ToastAndroid.show("This user doesn't seem to exist, Please try again", ToastAndroid.SHORT)
-            }
-        })
+        if (userName && password) {
+            verifyUserCredentials(userName, password, (user) => {
+                if (user) {
+                    setLoginState({ signedIn: true, token: user.id, userName: user.username })
+                } else {
+                    ToastAndroid.show("This user doesn't seem to exist, Please try again", ToastAndroid.SHORT)
+                }
+            })
+        } else {
+            ToastAndroid.show("Username and password must not be empty", ToastAndroid.LONG)
+        }
+
     }
 
     return (
@@ -44,11 +49,20 @@ export default SignIn = ({ navigation }) => {
                         style={[styles.inputs]}
                     />
                 </View>
-                <View style={[styles.loginMainContent]}>
-                    <Text style={{ fontSize: 10 }}>Forgot Password?</Text>
-                    <Text>Don't have an account?</Text>
+                <View style={[styles.forgotPasswordText]}>
+                    <Pressable
+                        title="Forgot password"
+                        onPress={() => {
+                            ToastAndroid.show("This feature has not been implemented yet!", ToastAndroid.SHORT)
+                        }}
+                    >
+                        <Text style={{ fontSize: 12 }}>Forgot Password?</Text>
+                    </Pressable>
                 </View>
                 <View style={[styles.logInButtons]}>
+                    <View style={[styles.loginMainContent]}>
+                        <Text>Don't have an account?</Text>
+                    </View>
                     <Pressable
                         title="Sign Up"
                         onPress={() => {

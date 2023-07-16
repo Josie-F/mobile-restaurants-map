@@ -6,7 +6,8 @@ export const styles = StyleSheet.create({
     // alignItems: 'center',
     // justifyContent: 'center',
     marginTop: 50,
-    marginBottom: 20
+    marginBottom: 20,
+    position: 'relative'
   },
   inputs: {
     alignItems: 'center',
@@ -54,6 +55,12 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center'
   },
+  forgotPasswordText: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    textAlign: 'center',
+    alignItems: 'center'
+  },
   loginInputContainer: {
     flexDirection: 'column',
     padding: 30,
@@ -61,7 +68,11 @@ export const styles = StyleSheet.create({
   },
   logInButtons: {
     flexDirection: 'column',
+    position: 'absolute',
     padding: 20,
+    bottom: 0,
+    alignSelf: 'center',
+    width: '100%'
   },
   welcomeTitle: {
     fontSize: 25,
