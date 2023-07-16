@@ -3,6 +3,7 @@ import { Text, Pressable, View, TextInput, ToastAndroid } from "react-native";
 import { styles } from "../layout/styleSheet";
 import * as Location from 'expo-location'
 
+// Home component
 export default Home = ({ navigation, route }) => {
     const [location, setLocation] = useState(null);
     const [currentRegion, setCurrentRegion] = useState(null);
@@ -33,12 +34,10 @@ export default Home = ({ navigation, route }) => {
                 });
                 setPostalLocation(post[0])
                 setLocation(locale);
-                console.log(currentRegion, "current region")
             }
 
         })();
     }, [location, postalLocation]);
-    console.log('filter', filter)
 
     return (
         <>

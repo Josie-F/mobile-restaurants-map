@@ -5,7 +5,7 @@ import { styles } from "../layout/styleSheet";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import * as Location from 'expo-location'
 
-
+// Map Component
 export default MapPage = ({ navigation, route }) => {
     const [currentFilter, setCurrentFilter] = useState(null);
     const [currentRegion, setCurrentRegion] = useState(null);
@@ -15,6 +15,7 @@ export default MapPage = ({ navigation, route }) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [modalDetails, setModalDetails] = useState({})
 
+    // Gets places in a radius of 5km in accordance with the query parameters. If filter is provided, api will get search results related to the filter search.
     nearbySearch = () => {
         setTopRestaurants([])
         let nearbyRestaurants = []
@@ -39,6 +40,7 @@ export default MapPage = ({ navigation, route }) => {
 
     }
 
+    // Gets detailed data of the specified place via id
     placeSearch = (placeId) => {
         setSelectedRestaurant(null)
         const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${process.env.EXPO_PUBLIC_API_KEY}`;
@@ -54,6 +56,7 @@ export default MapPage = ({ navigation, route }) => {
         }
     }
 
+    // Places a marker on the map when a restaurant is selected in the GooglePlacesAutocomplete search field.
     placeMarker = (details) => {
         setTopRestaurants([...topRestaurants, details])
         placeSearch(details.place_id);

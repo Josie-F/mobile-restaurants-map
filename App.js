@@ -15,6 +15,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const ButtonScreen = () => null;
 
+// Bottom Navigation Bar
 const TabScreens = ({ route, navigation }) => {
   const [loginState, setLoginState] = useContext(LoginContext);
   const { userName } = route.params;
@@ -79,10 +80,9 @@ const TabScreens = ({ route, navigation }) => {
   );
 }
 
+// Main Component
 export default function App() {
   const [loginState, setLoginState] = useState({ userName: '', signedIn: false, token: null });
-
-
   initiateDatabase();
   // getUsers(); // DEBUG ONLY
 

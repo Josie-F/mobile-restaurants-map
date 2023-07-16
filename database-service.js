@@ -2,6 +2,7 @@ import * as SQLite from 'expo-sqlite';
 let db
 
 
+// Initializes the database and creates a users table if it does not exist.
 export const initiateDatabase = async () => {
     if (!db) {
         try {
@@ -24,6 +25,7 @@ export const initiateDatabase = async () => {
     }
 }
 
+// Adds a new user to the users table
 export const addUser = (username, password, callback) => {
     db.transaction(transaction => {
         transaction.executeSql('INSERT INTO users (username, password) values (?, ?)', [username, password],
@@ -38,6 +40,7 @@ export const addUser = (username, password, callback) => {
         })
 }
 
+// Gets all users in the database
 export const getUsers = () => {
     db.transaction(transaction => {
         transaction.executeSql('SELECT * FROM users',
@@ -55,6 +58,7 @@ export const getUsers = () => {
         })
 }
 
+// Verifies a user's credentials in the database
 export const verifyUserCredentials = (username, password, callback) => {
     db.transaction(transaction => {
         transaction.executeSql(

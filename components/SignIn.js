@@ -5,7 +5,7 @@ import { verifyUserCredentials } from '../database-service';
 
 export const LoginContext = React.createContext({ loginState: { userName: '', signedIn: false, token: null }, setLoginState: () => { } });
 
-
+// Sign in Component
 export default SignIn = ({ navigation }) => {
     const [loginState, setLoginState] = useContext(LoginContext);
 

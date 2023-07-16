@@ -4,7 +4,7 @@ import { styles } from "../layout/styleSheet";
 import { verifyUserCredentials, addUser } from '../database-service';
 import { LoginContext } from "./SignIn";
 
-
+// Sign up Component
 export default SignUp = ({ navigation }) => {
     const [loginState, setLoginState] = useContext(LoginContext);
 
