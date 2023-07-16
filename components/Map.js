@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import MapView, { Marker } from 'react-native-maps';
-import { Text, View, FlatList, ToastAndroid } from "react-native";
+import { Text, View, FlatList, Modal, Pressable } from "react-native";
 import { styles } from "../layout/styleSheet";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
@@ -11,6 +11,8 @@ export default MapPage = ({ navigation, route }) => {
     const [topRestaurants, setTopRestaurants] = useState([]);
     const [selectedRestaurant, setSelectedRestaurant] = useState({});
     const mapInstanceRef = useRef(null);
+    const [modalVisible, setModalVisible] = useState(false)
+    const [modalDetails, setModalDetails] = useState({})
 
     nearbySearch = () => {
         setTopRestaurants([])
@@ -123,9 +125,9 @@ export default MapPage = ({ navigation, route }) => {
                                                     latitudeDelta: 0.01,
                                                     longitudeDelta: 0.01,
                                                 }, 2000);
-                                                ToastAndroid.show(`Delivery: ${selectedRestaurant.delivery} \n Dine In: ${selectedRestaurant.dine_in} \n  Website: ${selectedRestaurant.website}`, ToastAndroid.LONG)
-                                            }
-                                            }
+                                                setModalDetails({ website: selectedRestaurant.website, delivery: selectedRestaurant.delivery })
+                                                setModalVisible(true)
+                                            }}
                                         >
                                         </Marker>)
                                     })
@@ -139,6 +141,30 @@ export default MapPage = ({ navigation, route }) => {
                         Loading...
                     </Text>
             }
+
+            <Modal
+                animationType="slide"
+                transparent={false}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}>
+                <View>
+                    <View>
+                        <Pressable
+                            onPress={() => ToastAndroid.show("This feature has not been implemented yet!", ToastAndroid.LONG)}>
+                            <Text>Click here to book or inquire: {modalDetails.website}</Text>
+                        </Pressable>
+                        <Text>Dine In: {selectedRestaurant.dine_in}</Text>
+                        <Text>Delivery: {selectedRestaurant.delivery}</Text>
+                        {/* <Text>Opening Hours: {selectedRestaurant.delivery}</Text> */}
+                        <Pressable
+                            onPress={() => setModalVisible(!modalVisible)}>
+                            <Text>Close Modal</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
         </>
     )
 }
